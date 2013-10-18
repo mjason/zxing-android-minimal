@@ -14,7 +14,7 @@ Add the following to your build.gradle file:
         mavenCentral()
 
         maven {
-            url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
+            url "https://raw.github.com/mjason/zxing-android-minimal/mvn-repo/maven-repository/"
         }
     }
 

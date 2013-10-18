@@ -59,22 +59,26 @@ final class CameraConfigurationManager {
    * Reads, one time, values from the camera that are needed by the app.
    */
   void initFromCameraParameters(Camera camera) {
-    Camera.Parameters parameters = camera.getParameters();
-    WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-    Display display = manager.getDefaultDisplay();
-    int width = display.getWidth();
-    int height = display.getHeight();
-    // We're landscape-only, and have apparently seen issues with display thinking it's portrait 
-    // when waking from sleep. If it's not landscape, assume it's mistaken and reverse them:
-    if (width < height) {
-      Log.i(TAG, "Display reports portrait orientation; assuming this is incorrect");
-      int temp = width;
-      width = height;
-      height = temp;
-    }
-    screenResolution = new Point(width, height);
-    Log.i(TAG, "Screen resolution: " + screenResolution);
-    cameraResolution = findBestPreviewSizeValue(parameters, screenResolution);
+    Camera.Parameters parameters = camera.getParameters();  
+    WindowManager manager = (WindowManager) context  
+            .getSystemService(Context.WINDOW_SERVICE);  
+    Display display = manager.getDefaultDisplay();  
+    int width = display.getWidth();  
+    int height = display.getHeight();  
+    // We're landscape-only, and have apparently seen issues with display  
+    // thinking it's portrait  
+    // when waking from sleep. If it's not landscape, assume it's mistaken  
+    // and reverse them:  
+    if (width < height) {  
+        Log.i(TAG,  
+                "Display reports portrait orientation; assuming this is incorrect");  
+        int temp = width;  
+        width = height;  
+        height = temp;  
+    }  
+    screenResolution = new Point(height, width);  
+    Log.i(TAG, "Screen resolution: " + screenResolution);  
+    cameraResolution = findBestPreviewSizeValue(parameters, new Point(width, height));  
     Log.i(TAG, "Camera resolution: " + cameraResolution);
   }
 
@@ -127,6 +131,7 @@ final class CameraConfigurationManager {
     }
 
     parameters.setPreviewSize(cameraResolution.x, cameraResolution.y);
+    camera.setDisplayOrientation(90);
     camera.setParameters(parameters);
   }
 
